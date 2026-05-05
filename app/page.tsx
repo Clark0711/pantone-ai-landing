@@ -190,7 +190,7 @@ export default function HomePage() {
               <span className="text-white font-semibold">Pantone AI</span>
             </div>
             <p className="text-gray-500 text-sm">
-              © 2024 Pantone AI. All rights reserved.
+              © 2026 Pantone AI. All rights reserved.
             </p>
           </div>
         </div>
