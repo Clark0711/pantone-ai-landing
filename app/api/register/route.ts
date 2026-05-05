@@ -36,11 +36,11 @@ export async function POST(request: NextRequest) {
     // Generate token
     const token = await signToken({ email });
 
-    // Set cookie and redirect
+    // Set cookie and redirect - 统一跳转到 pantoneai.com.cn
     const response = NextResponse.json({
       success: true,
       message: '注册成功',
-      redirectUrl: 'https://pantone-color-system-3bm4iiy14-clark0711s-projects.vercel.app'
+      redirectUrl: 'https://pantoneai.com.cn/login?registered=true'
     });
 
     response.cookies.set('auth-token', token, {

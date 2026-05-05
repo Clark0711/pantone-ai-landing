@@ -9,6 +9,7 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,8 +42,10 @@ export default function RegisterPage() {
         return;
       }
 
-      // Redirect to target page
-      window.location.href = data.redirectUrl;
+      // 注册成功 - 显示成功消息，不自动跳转（避免微信内置浏览器拦截）
+      setSuccess(true);
+      setLoading(false);
+      setError(''); // 清除任何错误
     } catch {
       setError('网络错误，请重试');
       setLoading(false);
@@ -75,57 +78,88 @@ export default function RegisterPage() {
             <p className="text-gray-400">开启色彩管理之旅</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-sm text-gray-400 mb-2">邮箱</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="input-field w-full px-4 py-3 rounded-xl text-white"
-                placeholder="your@email.com"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm text-gray-400 mb-2">密码</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="input-field w-full px-4 py-3 rounded-xl text-white"
-                placeholder="至少6位"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm text-gray-400 mb-2">确认密码</label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="input-field w-full px-4 py-3 rounded-xl text-white"
-                placeholder="再次输入密码"
-                required
-              />
-            </div>
-
-            {error && (
-              <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20">
-                <p className="text-red-400 text-sm">{error}</p>
+          {success ? (
+            /* 注册成功后的提示 */
+            <div className="text-center py-4">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/20 flex items-center justify-center">
+                <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
               </div>
-            )}
+              <h2 className="text-xl font-semibold text-white mb-2">注册成功！</h2>
+              <p className="text-gray-400 mb-6">您的账号已创建，现在可以前往登录</p>
+              <a
+                href="https://pantoneai.com.cn/login"
+                className="btn-primary inline-block w-full py-3 rounded-xl text-white font-semibold text-center"
+              >
+                前往登录
+              </a>
+              <button
+                onClick={() => {
+                  setSuccess(false);
+                  setEmail('');
+                  setPassword('');
+                  setConfirmPassword('');
+                }}
+                className="mt-4 text-gray-400 hover:text-white text-sm"
+              >
+                继续注册
+              </button>
+            </div>
+          ) : (
+            /* 注册表单 */
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label className="block text-sm text-gray-400 mb-2">邮箱</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="input-field w-full px-4 py-3 rounded-xl text-white"
+                  placeholder="your@email.com"
+                  required
+                />
+              </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary w-full py-3 rounded-xl text-white font-semibold disabled:opacity-50"
-            >
-              {loading ? '注册中...' : '注册'}
-            </button>
-          </form>
+              <div>
+                <label className="block text-sm text-gray-400 mb-2">密码</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="input-field w-full px-4 py-3 rounded-xl text-white"
+                  placeholder="至少6位"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm text-gray-400 mb-2">确认密码</label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="input-field w-full px-4 py-3 rounded-xl text-white"
+                  placeholder="再次输入密码"
+                  required
+                />
+              </div>
+
+              {error && (
+                <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20">
+                  <p className="text-red-400 text-sm">{error}</p>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn-primary w-full py-3 rounded-xl text-white font-semibold disabled:opacity-50"
+              >
+                {loading ? '注册中...' : '注册'}
+              </button>
+            </form>
+          )}
 
           <div className="mt-6 text-center">
             <p className="text-gray-400">
