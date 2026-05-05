@@ -22,7 +22,7 @@ export async function createUser(email: string, password: string) {
       sql: 'INSERT INTO users (email, password) VALUES (?, ?)',
       args: [email, password],
     });
-    return { success: true, lastInsertId: result.lastInsertRowId };
+    return { success: true, lastInsertId: result.lastInsertRowid };
   } catch (error: unknown) {
     if (error instanceof Error && error.message.includes('UNIQUE constraint')) {
       return { success: false, error: '邮箱已被注册' };
